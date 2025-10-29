@@ -1,36 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Feed.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Feed.css";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
-  const [content, setContent] = useState('');
-  const [userName, setUserName] = useState('');
-  const [error, setError] = useState('');
+  const [content, setContent] = useState("");
+  const [userName, setUserName] = useState("");
+  const [error, setError] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const name = localStorage.getItem('userName');
-    
+    const token = localStorage.getItem("token");
+    const name = localStorage.getItem("userName");
+
     if (!token) {
-      navigate('/');
+      navigate("/");
       return;
     }
-    
+
     setUserName(name);
     fetchPosts();
   }, [navigate]);
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/posts/all');
+      const res = await axios.get(
+        "https://linkedin-backend-kzfo.onrender.com/api/posts/all"
+      );
       setPosts(res.data);
     } catch (err) {
-      setError('Failed to load posts');
+      setError("Failed to load posts");
     }
   };
 
@@ -53,67 +55,67 @@ const Feed = () => {
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
-    setError('');
-    
+    setError("");
+
     if (!content.trim()) return;
-    
+
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const formData = new FormData();
-      formData.append('content', content);
-      
+      formData.append("content", content);
+
       if (selectedImage) {
-        formData.append('image', selectedImage);
+        formData.append("image", selectedImage);
       }
-      
+
       await axios.post(
-        'http://localhost:5000/api/posts/create',
+        "https://linkedin-backend-kzfo.onrender.com/api/posts/create",
         formData,
-        { 
-          headers: { 
+        {
+          headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          } 
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
-      
-      setContent('');
+
+      setContent("");
       removeImage();
       fetchPosts();
     } catch (err) {
-      setError('Failed to create post');
+      setError("Failed to create post");
     }
   };
 
   const handleLike = async (postId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:5000/api/posts/${postId}/like`,
+        `https://linkedin-backend-kzfo.onrender.com/api/posts/${postId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchPosts();
     } catch (err) {
-      console.error('Failed to like post');
+      console.error("Failed to like post");
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    navigate('/');
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    navigate("/");
   };
 
   const formatDate = (date) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric', 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     };
-    return new Date(date).toLocaleDateString('en-US', options);
+    return new Date(date).toLocaleDateString("en-US", options);
   };
 
   return (
@@ -122,8 +124,12 @@ const Feed = () => {
         <h1>LinkedIn Clone</h1>
         <div className="user-info">
           <span>Welcome, {userName}</span>
-          <button onClick={() => navigate('/profile')} className="profile-btn">Profile</button>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <button onClick={() => navigate("/profile")} className="profile-btn">
+            Profile
+          </button>
+          <button onClick={handleLogout} className="logout-btn">
+            Logout
+          </button>
         </div>
       </header>
 
@@ -131,7 +137,7 @@ const Feed = () => {
         <div className="create-post-card">
           <h2>Create a Post</h2>
           {error && <div className="error">{error}</div>}
-          
+
           <form onSubmit={handleCreatePost}>
             <textarea
               placeholder="What do you want to talk about?"
@@ -140,14 +146,20 @@ const Feed = () => {
               rows="4"
               required
             />
-            
+
             {imagePreview && (
               <div className="image-preview">
                 <img src={imagePreview} alt="Preview" />
-                <button type="button" onClick={removeImage} className="remove-image">✕</button>
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="remove-image"
+                >
+                  ✕
+                </button>
               </div>
             )}
-            
+
             <div className="post-actions">
               <label htmlFor="image-upload" className="image-upload-btn">
                 📷 Add Photo
@@ -157,7 +169,7 @@ const Feed = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
               <button type="submit">Post</button>
             </div>
@@ -174,9 +186,15 @@ const Feed = () => {
                 <div className="post-header">
                   <div className="post-author">
                     {post.userProfilePicture ? (
-                      <img src={`http://localhost:5000${post.userProfilePicture}`} alt={post.userName} className="avatar-img" />
+                      <img
+                        src={`http://localhost:5000${post.userProfilePicture}`}
+                        alt={post.userName}
+                        className="avatar-img"
+                      />
                     ) : (
-                      <div className="avatar">{post.userName.charAt(0).toUpperCase()}</div>
+                      <div className="avatar">
+                        {post.userName.charAt(0).toUpperCase()}
+                      </div>
                     )}
                     <div>
                       <h3>{post.userName}</h3>
@@ -187,17 +205,19 @@ const Feed = () => {
                 <div className="post-content">
                   <p>{post.content}</p>
                   {post.imageUrl && (
-                    <img 
-                      src={`http://localhost:5000${post.imageUrl}`} 
-                      alt="Post content" 
+                    <img
+                      src={`http://localhost:5000${post.imageUrl}`}
+                      alt="Post content"
                       className="post-image"
                     />
                   )}
                 </div>
                 <div className="post-interactions">
-                  <button 
-                    onClick={() => handleLike(post._id)} 
-                    className={`like-btn ${post.likes?.length > 0 ? 'liked' : ''}`}
+                  <button
+                    onClick={() => handleLike(post._id)}
+                    className={`like-btn ${
+                      post.likes?.length > 0 ? "liked" : ""
+                    }`}
                   >
                     👍 {post.likes?.length || 0} Likes
                   </button>
@@ -215,4 +235,3 @@ const Feed = () => {
 };
 
 export default Feed;
-
