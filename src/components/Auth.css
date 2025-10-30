@@ -51,7 +51,7 @@
 }
 
 .auth-card button {
-  padding: 12px;
+  padding: 12px 16px;
   background: #0a66c2;
   color: white;
   border: none;
@@ -59,11 +59,94 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  min-height: 48px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .auth-card button:hover {
   background: #084d8f;
+}
+
+.auth-card button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #0a66c2;
+}
+
+/* Responsive button adjustments */
+@media (max-width: 480px) {
+  .auth-card button {
+    padding: 10px 14px;
+    font-size: 15px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 320px) {
+  .auth-card button {
+    padding: 8px 12px;
+    font-size: 14px;
+    min-height: 40px;
+  }
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 24px;
+  gap: 8px;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .button-content {
+    min-height: 20px;
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  .animate-spin {
+    width: 16px;
+    height: 16px;
+    margin: 0 3px;
+  }
+}
+
+@media (max-width: 320px) {
+  .button-content {
+    min-height: 18px;
+    gap: 4px;
+    font-size: 13px;
+  }
+
+  .animate-spin {
+    width: 14px;
+    height: 14px;
+    margin: 0 2px;
+  }
 }
 
 .error {
