@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./Auth.css";
 
 const Login = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 300,
+      once: true,
+      easing: "ease-out-cubic",
+    });
+  }, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,12 +41,20 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h1>LinkedIn Clone</h1>
-        <h2>Sign In</h2>
-        {error && <div className="error">{error}</div>}
+      <div className="auth-card" data-aos="fade-up" data-aos-delay="100">
+        <h1 data-aos="fade-down" data-aos-delay="200">
+          LinkedIn{" "}
+        </h1>
+        <h2 data-aos="fade-down" data-aos-delay="300">
+          Sign In
+        </h2>
+        {error && (
+          <div className="error" data-aos="fade-in">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} data-aos="fade-up" data-aos-delay="400">
           <input
             type="email"
             placeholder="Email"

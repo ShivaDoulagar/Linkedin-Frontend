@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AOS from "aos";
 import "./Feed.css";
+import "aos/dist/aos.css";
 
 const Feed = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 300,
+      once: true,
+      easing: "ease-out-cubic",
+    });
+  }, []);
+
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState("");
   const [userName, setUserName] = useState("");
@@ -120,8 +130,8 @@ const Feed = () => {
 
   return (
     <div className="feed-container">
-      <header className="navbar">
-        <h1>LinkedIn Clone</h1>
+      <header className="navbar" data-aos="fade-down">
+        <h1>LinkedIn </h1>
         <div className="user-info">
           <span>Welcome, {userName}</span>
           <button onClick={() => navigate("/profile")} className="profile-btn">
@@ -133,13 +143,15 @@ const Feed = () => {
         </div>
       </header>
 
-      <div className="feed-content">
+      <div className="feed-content" data-aos="fade-up" data-aos-delay="300">
         <div className="create-post-card">
           <h2>Create a Post</h2>
           {error && <div className="error">{error}</div>}
 
           <form onSubmit={handleCreatePost}>
             <textarea
+              data-aos="fade-up"
+              data-aos-delay="400"
               placeholder="What do you want to talk about?"
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -148,7 +160,11 @@ const Feed = () => {
             />
 
             {imagePreview && (
-              <div className="image-preview">
+              <div
+                className="image-preview"
+                data-aos="fade-up"
+                data-aos-delay="600"
+              >
                 <img src={imagePreview} alt="Preview" />
                 <button
                   type="button"
@@ -182,7 +198,12 @@ const Feed = () => {
             <p className="no-posts">No posts yet. Be the first to post!</p>
           ) : (
             posts.map((post) => (
-              <div key={post._id} className="post-card">
+              <div
+                key={post._id}
+                className="post-card"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              >
                 <div className="post-header">
                   <div className="post-author">
                     {post.userProfilePicture ? (
@@ -214,6 +235,8 @@ const Feed = () => {
                 </div>
                 <div className="post-interactions">
                   <button
+                    data-aos="fade-up"
+                    data-aos-delay="400"
                     onClick={() => handleLike(post._id)}
                     className={`like-btn ${
                       post.likes?.length > 0 ? "liked" : ""
@@ -221,7 +244,11 @@ const Feed = () => {
                   >
                     👍 {post.likes?.length || 0} Likes
                   </button>
-                  <span className="comment-count">
+                  <span
+                    className="comment-count"
+                    data-aos="fade-up"
+                    data-aos-delay="400"
+                  >
                     💬 {post.comments?.length || 0} Comments
                   </span>
                 </div>
